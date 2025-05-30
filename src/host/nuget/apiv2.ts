@@ -173,19 +173,22 @@ export default class NuGetApiV2 {
               }
             ],
             targetFramework: sp[2]
-          }
+          };
         });
       dependencies.forEach((dependencyGroup: any) => {
         let targetFramework = dependencyGroup.targetFramework;
-        packageDetails.dependencies.frameworks[targetFramework] = [];
+        if (!packageDetails.dependencies.frameworks[targetFramework]) {
+          packageDetails.dependencies.frameworks[targetFramework] = [];
+        }
         dependencyGroup.dependencies?.forEach((dependency: any) => {
           packageDetails.dependencies.frameworks[targetFramework].push({
             package: dependency.id,
             versionRange: dependency.range,
           });
         });
-        if (packageDetails.dependencies.frameworks[targetFramework].length == 0)
+        if (packageDetails.dependencies.frameworks[targetFramework].length === 0) {
           delete packageDetails.dependencies.frameworks[targetFramework];
+        }
       });
     } catch (error) {
     }
@@ -201,6 +204,7 @@ export default class NuGetApiV2 {
     if (response instanceof AxiosError) {
       console.error("Axios Error Data:");
       console.error(response.response?.data);
+      // eslint-disable-next-line no-throw-literal
       throw {
         message: `${response.message} on request to${url}`,
       };
@@ -272,6 +276,7 @@ export default class NuGetApiV2 {
       return parsedResult;
     } catch (err) {
       console.error(err);
+      // eslint-disable-next-line no-throw-literal
       throw {
         credentialProviderError: true,
         message: "Failed to fetch credentials. See 'Webview Developer Tools' for more details",
