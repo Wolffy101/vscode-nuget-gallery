@@ -32,8 +32,13 @@ export function activate(context: vscode.ExtensionContext) {
   const telemetry = new Telemetry(context);
   telemetry.sendEvent("activated");
 
-  let previousVersion: string | undefined = context.globalState.get("NugetGallery.version");
-  context.globalState.update("NugetGallery.version", context.extension.packageJSON.version);
+  let previousVersion: string | undefined = context.globalState.get(
+    "NugetGallery.version"
+  );
+  context.globalState.update(
+    "NugetGallery.version",
+    context.extension.packageJSON.version
+  );
   if (previousVersion == undefined) {
     telemetry.sendEvent("installed");
   } else if (previousVersion != context.extension.packageJSON.version)
@@ -49,18 +54,25 @@ export function activate(context: vscode.ExtensionContext) {
   );
   context.subscriptions.push(
     vscode.commands.registerCommand("nuget-gallery.openSettings", async () => {
-      await mediator?.PublishAsync<ShowSettingsRequest, ShowSettingsResponse>(SHOW_SETTINGS, {});
+      await mediator?.PublishAsync<ShowSettingsRequest, ShowSettingsResponse>(
+        SHOW_SETTINGS,
+        {}
+      );
     })
   );
   context.subscriptions.push(
     vscode.commands.registerCommand("nuget-gallery.sponsor", async () => {
-      vscode.env.openExternal(vscode.Uri.parse("https://github.com/sponsors/pcislo"));
+      vscode.env.openExternal(
+        vscode.Uri.parse("https://github.com/sponsors/pcislo")
+      );
     })
   );
   context.subscriptions.push(
     vscode.commands.registerCommand("nuget-gallery.reportProblem", async () => {
       vscode.env.openExternal(
-        vscode.Uri.parse("https://github.com/pcislo/vscode-nuget-gallery/issues/new")
+        vscode.Uri.parse(
+          "https://github.com/pcislo/vscode-nuget-gallery/issues/new"
+        )
       );
     })
   );

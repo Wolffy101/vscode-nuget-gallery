@@ -10,7 +10,7 @@ import {
   volatile,
   when,
 } from "@microsoft/fast-element";
-import { PackageViewModel } from "../types";
+import { PackageViewModel, ProjectViewModel } from "../types";
 import codicon from "@/web/styles/codicon.css";
 import { IMediator } from "../registrations";
 import { GET_PACKAGE_DETAILS } from "@/common/messaging/core/commands";
@@ -25,14 +25,18 @@ const template = html<PackageDetailsComponent>`
         (x) => x.package?.LicenseUrl,
         html<PackageDetailsComponent>`
           <span class="title">License:</span>
-          <vscode-link href=${(x) => x.package?.LicenseUrl}>View License</vscode-link>
+          <vscode-link href=${(x) => x.package?.LicenseUrl}
+            >View License</vscode-link
+          >
         `
       )}
       ${when(
         (x) => x.package?.ProjectUrl,
         html<PackageDetailsComponent>`
           <span class="title">Project Url:</span>
-          <vscode-link href=${(x) => x.package?.ProjectUrl}>View Project</vscode-link>
+          <vscode-link href=${(x) => x.package?.ProjectUrl}
+            >View Project</vscode-link
+          >
         `
       )}
       ${when(
@@ -48,21 +52,31 @@ const template = html<PackageDetailsComponent>`
   <expandable-container title="Dependencies">
     ${when(
       (x) => x.packageDetailsLoading,
-      html<PackageDetailsComponent>`<vscode-progress-ring class="loader"></vscode-progress-ring>`,
+      html<PackageDetailsComponent>`<vscode-progress-ring
+        class="loader"
+      ></vscode-progress-ring>`,
       html<PackageDetailsComponent>` <div class="dependencies">
         ${when(
-          (x) => Object.keys(x.packageDetails?.dependencies?.frameworks || {}).length > 0,
+          (x) =>
+            Object.keys(x.packageDetails?.dependencies?.frameworks || {})
+              .length > 0,
           html<PackageDetailsComponent>`
             <ul>
               ${repeat(
-                (x) => Object.keys(x.packageDetails?.dependencies?.frameworks || {}),
+                (x) =>
+                  Object.keys(x.packageDetails?.dependencies?.frameworks || {}),
                 html<string>`
                   <li>
                     ${(x) => x}
                     <ul>
                       ${repeat(
-                        (x, y: ExecutionContext<PackageDetailsComponent, any>) =>
-                          y.parent.packageDetails?.dependencies?.frameworks[x] || [],
+                        (
+                          x,
+                          y: ExecutionContext<PackageDetailsComponent, any>
+                        ) =>
+                          y.parent.packageDetails?.dependencies?.frameworks[
+                            x
+                          ] || [],
                         html<PackageDependency>`<li>
                           ${(x) => x.package} ${(x) => x.versionRange}
                         </li>`

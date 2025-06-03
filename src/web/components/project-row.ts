@@ -12,7 +12,7 @@ import {
 import codicon from "@/web/styles/codicon.css";
 import { IMediator } from "../registrations";
 import { UPDATE_PROJECT } from "@/common/messaging/core/commands";
-import { ProjectPackageViewModel, ProjectViewModel } from "../types";
+import { ProjectViewModel } from "../types";
 import ObservableDictionary from "../utilities/ObservableDictionary";
 
 const template = html<ProjectRow>`
@@ -127,11 +127,10 @@ export class ProjectRow extends FASTElement {
       Version: this.packageVersion,
     };
     this.loaders.Add(request.PackageId, true);
-    let result = await this.mediator.PublishAsync<UpdateProjectRequest, UpdateProjectResponse>(
+    await this.mediator.PublishAsync<UpdateProjectRequest, UpdateProjectResponse>(
       UPDATE_PROJECT,
       request
     );
-    this.project.Packages = result.Project.Packages.map((x) => new ProjectPackageViewModel(x));
     this.loaders.Remove(request.PackageId);
     this.$emit("project-updated");
   }

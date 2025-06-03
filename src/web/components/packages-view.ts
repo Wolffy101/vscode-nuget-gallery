@@ -145,7 +145,7 @@ const template = html<PackagesView>`
                           @project-updated=${(
                             x,
                             c: ExecutionContext<PackagesView, any>
-                          ) => c.parent.LoadProjectsPackages()}
+                          ) => c.parent.LoadProjects()}
                           :project=${(x) => x}
                           :packageId=${(
                             x,

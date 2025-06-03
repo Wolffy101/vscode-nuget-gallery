@@ -8,5 +8,4 @@ type UpdateProjectRequest = {
 };
 
 type UpdateProjectResponse = {
-  Project: Project;
 };

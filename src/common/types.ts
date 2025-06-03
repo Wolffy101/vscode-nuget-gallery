@@ -43,6 +43,10 @@ type Project = {
   Path: string;
   Packages: Array<ProjectPackage>;
 };
+type Props = {
+  Type: number;
+  Package: ProjectPackage;
+};
 
 type Source = {
   Name: string;
