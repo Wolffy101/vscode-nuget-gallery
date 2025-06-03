@@ -476,6 +476,7 @@ export class PackagesView extends FASTElement {
     >(GET_PACKAGE, {
       Id: projectPackage.Id,
       Url: this.filters.SourceUrl,
+      OtherUrls: this.configuration.Configuration?.Sources.map((p) => p.Url),
     });
 
     if (result.IsFailure || !result.Package) {

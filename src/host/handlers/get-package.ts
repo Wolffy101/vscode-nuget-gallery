@@ -2,11 +2,24 @@ import { IRequestHandler } from "@/common/messaging/core/types";
 import nugetApiFactory from "../nuget/api-factory";
 import * as vscode from "vscode";
 
-export class GetPackage implements IRequestHandler<GetPackageRequest, GetPackageResponse> {
+export class GetPackage
+  implements IRequestHandler<GetPackageRequest, GetPackageResponse>
+{
   async HandleAsync(request: GetPackageRequest): Promise<GetPackageResponse> {
-    let api = nugetApiFactory.GetSourceApi(request.Url);
+    if (request.OtherUrls !== undefined) {
+      for (const url of request.OtherUrls) {
+        var result = await this.GetPackageAsync(url, request.Id);
+        if (!result.IsFailure) {
+          return result;
+        }
+      }
+    }
+    return this.GetPackageAsync(request.Url, request.Id);
+  }
+  private async GetPackageAsync(url: string, id: string) {
+    let api = nugetApiFactory.GetSourceApi(url);
     try {
-      let packageResult = await api.GetPackageAsync(request.Id);
+      let packageResult = await api.GetPackageAsync(id);
 
       if (packageResult.isError) {
         return {
@@ -25,7 +38,7 @@ export class GetPackage implements IRequestHandler<GetPackageRequest, GetPackage
     } catch (err: any) {
       console.error(err);
       vscode.window.showErrorMessage(
-        `Failed to fetch packages: ${err.message}`,
+        `Failed to fetch packages: ${err.message}`
       );
       let result: GetPackageResponse = {
         IsFailure: true,
